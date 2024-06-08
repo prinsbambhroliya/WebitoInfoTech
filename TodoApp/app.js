@@ -4,23 +4,16 @@ const btntext = addtask.innerText;
 const tasktitle = document.getElementById('tasktitle');
 const taskdesc = document.getElementById('taskdesc');
 const recordsDisplay = document.getElementById('records');
-let tasktitlearray = [];
-let taskdescarray = [];
+let tasks = [];
 // For Edit Task
 let edit_id = null;
 
 // Get Object From Local Storage
-let objstrtitle = localStorage.getItem('tasktitle');
-if (objstrtitle != null) {
-    tasktitlearray = JSON.parse(objstrtitle);
+let objstr = localStorage.getItem('tasks');
+if (objstr != null) {
+    tasks = JSON.parse(objstr);
 }
-console.log(tasktitlearray);
-
-let objstrdesc = localStorage.getItem('taskdesc');
-if (objstrdesc != null) {
-    taskdescarray = JSON.parse(objstrdesc);
-}
-console.log(taskdescarray);
+console.log(tasks);
 
 DisplayInfo();
 
@@ -36,38 +29,33 @@ addtask.onclick = () => {
 
     if (edit_id != null) {
         // Edit 
-        tasktitlearray.splice(edit_id, 1, { 'title': tasktitlevalue });
-        taskdescarray.splice(edit_id, 1, { 'task': taskdescvalue });
+        tasks[edit_id] = { 'title': tasktitlevalue, 'description': taskdescvalue };
         edit_id = null;
     } else {
         // Insert Records
-        tasktitlearray.push({ 'title': tasktitlevalue });
-        taskdescarray.push({ 'task': taskdescvalue });
+        tasks.push({ 'title': tasktitlevalue, 'description': taskdescvalue });
     }
 
-    SaveInfo(tasktitlearray, taskdescarray);
+    SaveInfo(tasks);
     tasktitle.value = '';
     taskdesc.value = '';
     addtask.innerText = btntext;
 }
 
 // Save The Task In Local Storage
-function SaveInfo(tasktitlearray, taskdescarray) {
-    let strtitle = JSON.stringify(tasktitlearray);
-    let strdesc = JSON.stringify(taskdescarray);
-    localStorage.setItem('tasktitle', strtitle);
-    localStorage.setItem('taskdesc', strdesc);
+function SaveInfo(tasks) {
+    let str = JSON.stringify(tasks);
+    localStorage.setItem('tasks', str);
     DisplayInfo();
 }
 // Display The All Task In Table
 function DisplayInfo() {
     let statement = '';
-    tasktitlearray.forEach((title, i) => {
-        const task = taskdescarray[i]; // Assuming corresponding elements
+    tasks.forEach((task, i) => {
         statement += `<tr>
         <th scope="row">${i + 1}</th>
-        <td>${title.title}</td>
-        <td>${task.task}</td>
+        <td>${task.title}</td>
+        <td>${task.description}</td>
         <td>
         <i class="btn text-white btn-info mx-3 fa-solid fa-pen-to-square" onclick='EditInfo(${i})'></i>
         <i class="btn btn-danger text-white fa-solid fa-trash" onclick='DeleteInfo(${i})'></i>
@@ -79,13 +67,14 @@ function DisplayInfo() {
 
 function EditInfo(id) {
     edit_id = id;
-    tasktitle.value = tasktitlearray[id].title;
-    taskdesc.value = taskdescarray[id].task;
+    tasktitle.value = tasks[id].title;
+    taskdesc.value = tasks[id].description;
     addtask.innerText = 'Save Changes';
 }
 
 function DeleteInfo(id) {
-    tasktitlearray.splice(id, 1);
-    taskdescarray.splice(id, 1);
-    SaveInfo(tasktitlearray, taskdescarray);
+    tasks.splice(id, 1);
+    SaveInfo(tasks);
 }
+
+
