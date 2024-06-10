@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sequential Timer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Sequential Name Display</h1>
+    <button id="startButton">Start Timer</button>
+    <div id="output"></div>
+
+    <script>
+    document.getElementById("startButton")
+    document.addEventListener("click", startTimer);
+
+      function startTimer() {
+        //Disable the button
+        document.getElementById("startButton").disabled = true;
+        document.getElementById("output").innerHTML = ""; //For Clear Every Time
+
+        const friends = [
+          { name: "Priya", delay: 2000 },
+          { name: "Manan", delay: 5000 },
+          { name: "Yash", delay: 3000 },
+          { name: "Tirth", delay: 6000 },
+          { name: "Prince", delay: 4000 },
+        ];
+
+        let totalTime = 0;
+        friends.forEach((friend) => {
+          totalTime += friend.delay;
+          setTimeout(() => {
+            document.getElementById(
+              "output"
+            ).innerHTML += `<p>${friend.name}</p>`;
+          }, totalTime);
+        });
+
+        // Clear the timer
+        setTimeout(() => {
+          document.getElementById("output").innerHTML += `<p>Timer Cleared</p>`;
+          // Re-enable the button
+          document.getElementById("startButton").disabled = false;
+        }, totalTime + 1000); // adding an extra second for clearing message
+      }
+    </script>
+  </body>
+</html>
