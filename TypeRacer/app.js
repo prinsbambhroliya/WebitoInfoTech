@@ -5,17 +5,20 @@ const sentence =
   "A number of other techniques that you can use to establish coherence in paragraphs.";
 const maxTime = 30000; // 30 seconds in milliseconds
 
+let textInput = document.getElementById("textInput");
+let startButton = document.getElementById("startButton");
+
 function startTest() {
-  document.getElementById("textInput").disabled = false;
-  document.getElementById("textInput").value = "";
+  textInput.disabled = false;
+  textInput.value = "";
   document.getElementById("message").textContent = "";
   document.getElementById("time").textContent = "30";
   document.getElementById("mistakes").textContent = "0";
   mistakeCount = 0;
-//   To Focus and Write Directly
-  document.getElementById("textInput").focus();
-  document.getElementById("startButton").disabled = true;
-  document.getElementById("startButton").textContent = "Test in Progress...";
+  //   To Focus and Write Directly
+  textInput.focus();
+  startButton.disabled = true;
+  startButton.textContent = "Test in Progress...";
 
   timer = setTimeout(() => {
     checkResult();
@@ -34,7 +37,7 @@ function startTest() {
 function checkResult() {
   clearTimeout(timer);
   clearInterval(countdown);
-  const inputText = document.getElementById("textInput").value;
+  const inputText = textInput.value;
   const messageElement = document.getElementById("message");
 
   if (inputText === "") {
@@ -58,13 +61,13 @@ function checkResult() {
     }
   }
 
-  document.getElementById("textInput").disabled = true;
-  document.getElementById("startButton").disabled = false;
-  document.getElementById("startButton").textContent = "Restart Test";
+  textInput.disabled = true;
+  startButton.disabled = false;
+  startButton.textContent = "Restart Test";
 }
 
-document.getElementById("textInput").addEventListener("input", function () {
-  const inputText = document.getElementById("textInput").value;
+textInput.addEventListener("input", function () {
+  const inputText = textInput.value;
   let currentMistakes = 0;
   for (let i = 0; i < inputText.length; i++) {
     if (inputText[i] !== sentence[i]) {
